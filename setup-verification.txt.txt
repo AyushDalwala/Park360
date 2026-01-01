@@ -1,0 +1,14 @@
+npm: 9.8.1
+
+vs code: Version: 1.106.3 (user setup)
+Commit: bf9252a2fb45be6893dd8870c0bf37e2e1766d61
+Date: 2025-11-25T22:28:18.024Z
+Electron: 37.7.0
+ElectronBuildId: 12781156
+Chromium: 138.0.7204.251
+Node.js: 22.20.0
+V8: 13.8.258.32-electron.0
+OS: Windows_NT x64 10.0.22631
+
+MySQL: Ver 8.0.44 for Win64 on x86_64 (MySQL Community Server - GPL)
+

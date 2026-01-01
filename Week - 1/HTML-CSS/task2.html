@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Forms</title>
+</head>
+<body>
+    <h1>HTML Form</h1>
+    <form action="task1.html" target="_self" method="post">
+
+        <fieldset>
+
+        <legend>Personal Information: </legend>
+
+        <label for="fname">First Name: </label><br>
+        <input type="text" id="fname" name="fname" /><br><br>
+
+
+        <label for="lname">Last Name: </label><br>
+        <input type="text" id="lname" name="lname"/><br><br>
+
+        <label for="pin">Pincode:</label><br>
+        <input type="text" id="pin" name="pin" maxlength="6"><br><br>
+
+        <label for="datemin">Date of Birth (after 01-01-2001):</label><br>
+        <input type="date" id="datemin" name="datemin" min="2011-01-01"><br><br>
+
+        <label for="tech">Choose Technologies: </label>
+        <select id="tech" name="tech">
+            <option value="node.js">Node.js</option>
+            <option value="react.js">React.js</option>
+            <option value="js" selected>JavaScript</option>
+            <option value=".net">.NET</option>
+        </select><br><br>
+
+        
+        <textarea name="address" rows="10" cols="30" placeholder="type your address..."></textarea><br><br>
+
+        <label for="browsers">DataList Demo: </label><br>
+        <input list="browsers">
+            <datalist id="browsers">
+                <option value="Edge">
+                <option value="Firefox">
+                <option value="Chrome">
+                <option value="Opera">
+                <option value="Safari">
+            </datalist><br><br>
+
+        <input type="submit" id="submit" value="Submit" />
+        <!-- <button type="submit" id="submit">Submit</button> -->
+        </fieldset>
+    </form>
+</body>
+</html>
