@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation</title>
+
+    <style>
+        .box{
+            width: 100px;
+            height: 100px;
+            background: red;
+            transition: 0.5s;
+        }
+
+        .box:hover{
+            transform: scale(1.3) rotate(10deg);
+        }
+
+        @keyframes move {
+            from{
+                left: 0;
+            }
+            to{
+                left: 200px;
+            }
+        }
+
+        .anim-box {
+            width: 100px;
+            height: 100px;
+            background: green;
+            position: relative;
+            animation: move 2s infinite;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <br/>
+    <div class="box"></div>
+    <br/>
+    <div class="anim-box"></div>
+
+</body>
+</html>

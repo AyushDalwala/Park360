@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Grid</title>
+
+    <style>
+        .float-box{
+            float: left;
+            width: 100px;
+            height: 100px;
+            background: red;
+            margin-right: 10px;
+        }
+
+        .flex{
+            display: flex;
+            gap: 10px;
+        }
+
+        .grid{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    
+    <h3>Float Example</h3>
+    <div class="float-box"></div>
+    <div class="float-box"></div>
+    
+    <br><br><br><br>
+
+    <h3>Flex Example</h3>
+    <div class="flex">
+        <div>Box1</div>
+        <div>Box2</div>
+        <div>Box3</div>
+    </div>
+
+    <h3>Grid Example</h3>
+    <div class="grid">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+    </div>
+
+</body>
+</html>

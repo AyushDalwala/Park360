@@ -12,3 +12,23 @@ OS: Windows_NT x64 10.0.22631
 
 MySQL: Ver 8.0.44 for Win64 on x86_64 (MySQL Community Server - GPL)
 
+GitHub Setup:
+
+git init
+
+git remote add origin https://github.com/AyushDalwala/Park360.git
+
+git remote -v
+
+git checkout -b setup/dev-environment
+
+git add .
+git status
+git commit -m "chore: add task"
+git push origin setup/dev-environment
+
+To daily update:
+
+git add .
+git commit -m "fetal: task completed"
+git push origin setup/dev-environment
