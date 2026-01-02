@@ -33,6 +33,21 @@
             position: relative;
             animation: move 2s infinite;
         }
+
+        @keyframes myAnim {
+            0% {background-color: red;}
+            25% {background-color: yellow;}
+            50% {background-color: blue;}
+            100% {background-color: green;}
+        }
+
+        .box2{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            animation-name: myAnim;
+            animation-duration: 4s;   
+        }
     </style>
 
 </head>
@@ -42,6 +57,9 @@
     <div class="box"></div>
     <br/>
     <div class="anim-box"></div>
+    <br/>
+    <br/>
+    <div class="box2"></div>
 
 </body>
 </html>
