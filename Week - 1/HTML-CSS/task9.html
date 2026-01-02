@@ -6,22 +6,77 @@
     <title>Pseudo class and element</title>
 
     <style>
-        a:hover{
+        body{
+            font-family: Arial;
+            padding: 30px;
+        }
+
+        .btn:hover{
+            background-color: green;
+            color: white;
+        }
+
+        input:focus{
+            border: 2px solid blue;
+            outline: none;
+        }
+
+        a:active{
             color: red;
+        }
+
+        ul li:first-child{
+            color: orange;
+            font-weight: bold;
+        }
+
+        h2::before{
+            content: "--- ";
+            color: red;
+        }
+
+        h2::after{
+            content: " ---";
+            color: green;
         }
 
         p::first-letter{
             font-size: 30px;
             color: blue;
         }
+
+        p::first-line{
+            font-weight: bold;
+        }
+
+        ::selection{
+            background-color: yellow;
+            color: black;
+        }
     </style>
 
 </head>
 <body>
     
-    <a href="#">Hover Here</a>
+    <h2>Pseudo Class and Element</h2>
 
-    <p>Paragraph 1</p>
+    <button class="btn">Hover Here....</button>
+    <br><br>
+
+    <input type="text" placeholder="Click Here">
+    <br><br>
+
+    <a href="#">Click Link</a>
+
+    <ul>
+        <li>First Item</li>
+        <li>Second Item</li>
+        <li>Third Item</li>
+    </ul>
+
+    <p>
+        select this text to see selection effect
+    </p>
 
 </body>
 </html>
