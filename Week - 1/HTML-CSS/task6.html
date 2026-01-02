@@ -6,29 +6,56 @@
     <title>Display and Z-Index</title>
 
     <style>
-        .box1{
-            position: absolute;
-            top: 50px;
-            left: 50px;
-            width: 150px;
-            height: 150px;
-            background: red;
-            z-index: 2;
-        }
+       body{
+        font-family: Arial;
+        padding: 40px;
+       }
 
-        .box2{
-            position: absolute;
-            top: 80px;
-            left: 80px;
-            width: 150px;
-            height: 150px;
-            background: yellow;
-            z-index: 1;
-        }
+       .container{
+        position: relative;
+        width: 300px;
+        height: 300px;
+        border: 2px solid black;
+       }
+
+       .box{
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        line-height: 150px;
+       }
+
+       .box1{
+        background-color: red;
+        top: 20px;
+        left: 20px;
+        z-index: 1;
+       }
+
+       .box2{
+        background-color: blue;
+        top: 60px;
+        left: 60px;
+        z-index: 2;
+       }
+
+       .box3{
+        background-color: green;
+        top: 100px;
+        left: 100px;
+        z-index: 3;
+       }
     </style>
 </head>
 <body>
-    <div class="box1"></div>
-    <div class="box2"></div>
+    <h2>Z-Index Demo</h2>
+    <div class="container">
+        <div class="box box1"></div>
+        <div class="box box2"></div>
+        <div class="box box3"></div>
+    </div>
 </body>
 </html>
