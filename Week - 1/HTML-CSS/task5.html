@@ -6,19 +6,74 @@
     <title>Box Model</title>
 
     <style>
+        body{
+            font-family: Arial;
+            background: #f5f5f5;
+            padding: 30px;
+        }
+
+        .container{
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
         .box{
-            width: 200px;
-            padding: 20px;
-            border: 5px solid red;
-            margin: 30px;
+            width: 220px;
+            height: 150px;
+            padding: 15px;
+            background: white;
+            text-align: center;
+            line-height: 120px;
+            font-weight: bold;
+        }
+
+        .border-box{
+            border: 2px solid black;
+        }
+
+        .rounded-box{
+            border: 2px solid blue;
+            border-radius: 15px;
+        }
+
+        .shadow-box{
+            box-shadow: 4px 4px 10px gray;
+        }
+
+        .soft-shadow-box{
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .gradient-box{
+            background: linear-gradient(to right, orange, red);
+            color: white;
+        }
+
+        .outline-box{
+            outline: 3px dashed green;
+        }
+
+        .hover-box{
+            transition: all 0.3s ease;
+        }
+
+        .hover-box:hover{
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: center;">
-    <div class="box" style="text-align: center;">
-        This is a box model
-    </div>
+    <h2>CSS Box Styling</h2>
+    <div class="container">
+        <div class="box border-box">Border</div>
+        <div class="box rounded-box">Rounded</div>
+        <div class="box shadow-box">Shadow</div>
+        <div class="box soft-shadow-box">Soft Shadow</div>
+        <div class="box gradient-box">Gradient</div>
+        <div class="box outline-box">Outline</div>
+        <div class="box hover-box">Hover</div>
     </div>
 </body>
 </html>

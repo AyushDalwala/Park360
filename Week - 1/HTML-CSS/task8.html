@@ -6,46 +6,85 @@
     <title>Flex Grid</title>
 
     <style>
-        .float-box{
-            float: left;
-            width: 100px;
-            height: 100px;
-            background: red;
-            margin-right: 10px;
-        }
+      body{
+        font-family: Arial;
+        padding: 20px;
+      }
 
-        .flex{
-            display: flex;
-            gap: 10px;
-        }
+      h2{
+        margin-top: 40px;
+      }
 
-        .grid{
-            display: grid;
-        
-            gap: 10px;
-        }
+      .float-container{
+        border: 2px solid black;
+        overflow: hidden;
+      }
+
+      .float-box{
+        width: 30%;
+        height: 100px;
+        float: left;
+        background: lightcoral;
+        margin: 1%;
+        text-align: center;
+        line-height: 100px;
+      }
+
+      .flex-container{
+        display: flex;
+        justify-content: space-between;
+        border: 2px solid black;
+        padding: 10px;
+      }
+
+      .flex-box{
+        width: 30%;
+        height: 100px;
+        background: lightgreen;
+        text-align: center;
+        line-height: 100px;
+      }
+
+      .grid-container{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        border: 2px solid black;
+        padding: 10px;
+      }
+
+      .grid-box{
+        height: 100px;
+        background: lightblue;
+        text-align: center;
+        line-height: 100px;
+      }
+
     </style>
 </head>
 <body>
     
-    <h3>Float Example</h3>
-    <div class="float-box"></div>
-    <div class="float-box"></div>
-    
-    <br><br><br><br>
+    <h1>Float, Flex and Grid</h1>
 
-    <h3>Flex Example</h3>
-    <div class="flex">
-        <div>Box1</div>
-        <div>Box2</div>
-        <div>Box3</div>
+    <h2>Float</h2>
+    <div class="float-container">
+        <div class="float-box">Float 1</div>
+        <div class="float-box">Float 2</div>
+        <div class="float-box">Float 3</div>
     </div>
 
-    <h3>Grid Example</h3>
-    <div class="grid">
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
+    <h2>Flex</h2>
+    <div class="flex-container">
+        <div class="flex-box">Flex 1</div>
+        <div class="flex-box">Flex 2</div>
+        <div class="flex-box">Flex 3</div>
+    </div>
+
+    <h2>Grid</h2>
+    <div class="grid-container">
+        <div class="grid-box">Grid 1</div>
+        <div class="grid-box">Grid 2</div>
+        <div class="grid-box">Grid 3</div>
     </div>
 
 </body>
