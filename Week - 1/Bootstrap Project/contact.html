@@ -80,11 +80,11 @@
                 time: new Date().toLocaleString()
             };
 
-            let stored = JSON.parse(localStorage.getItem("contacts")) || [];    //get old data or empty array
-            stored.push(contactData);                                           //add new record
-            localStorage.setItem("contacts",JSON.stringify(stored));            //save again
-            document.getElementById("msg").classList.remove("d-none");          //show success msg
-            document.getElementById("contact-form").reset();                    //reset form
+            let stored = JSON.parse(localStorage.getItem("contacts")) || [];    
+            stored.push(contactData);                                           
+            localStorage.setItem("contacts",JSON.stringify(stored));            
+            document.getElementById("msg").classList.remove("d-none");         
+            document.getElementById("contact-form").reset();                   
         });
 
     </script>
