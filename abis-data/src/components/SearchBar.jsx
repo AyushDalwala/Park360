@@ -27,11 +27,11 @@ const SearchBar = ({
       </div>
 
       <div className="field-group">
-        <label>Product No</label>
+        <label>Gateslip No</label>
         <div className="input-action">
           <input
             type="text"
-            placeholder="Enter Product No"
+            placeholder="Enter Gateslip No"
             value={productNo}
             onChange={e => setProductNo(e.target.value)}
           />
