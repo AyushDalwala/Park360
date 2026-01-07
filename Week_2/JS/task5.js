@@ -36,3 +36,10 @@ let products = [
 
 console.log(products[0].name);
 console.log(products[1].price);
+
+//another way to create object
+const person = new Object({
+    firstName: "Ayush",
+    lastName: "Dalwala",
+    role: "Full Stack Developer"
+});
