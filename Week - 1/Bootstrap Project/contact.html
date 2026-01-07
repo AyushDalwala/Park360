@@ -77,7 +77,7 @@
                 name: name,
                 email: email,
                 remarks: remarks,
-                time: new Date().toLocaleString()
+                time: new Date().toLocaleString().toUpperCase()
             };
 
             let stored = JSON.parse(localStorage.getItem("contacts")) || [];    
