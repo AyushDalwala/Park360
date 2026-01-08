@@ -158,10 +158,9 @@ tbody tr:nth-child(even) {
 
 /* Recent search */
 .recent-floating {
-  position: fixed;
-  top: 120px;
-  right: 20px;
-  z-index: 1200;
+  position: relative;
+  margin-left: auto;
+  align-self: flex-end;
 }
 
 .recent-btn {
@@ -190,6 +189,9 @@ tbody tr:nth-child(even) {
 }
 
 .recent-panel {
+  position: absolute;
+  top: 52px;
+  right: 0;
   width: 260px;
   max-height: 320px;
   background: #ffffff;
@@ -197,14 +199,10 @@ tbody tr:nth-child(even) {
   border-radius: 8px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.15);
   overflow-y: auto;
-  position: sticky;
-  z-index: 999;
-  top: 100px;
-  margin-left: auto;
+  z-index: 10;
 }
 
 .recent-header {
-  _attach {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -214,8 +212,8 @@ tbody tr:nth-child(even) {
     color: #1f2937;
     border-bottom: 1px solid #e5e73b;
     background: #f3f6fa;
-  }
 }
+
   .recent-close {
     cursor: pointer;
     color: #6b7280;

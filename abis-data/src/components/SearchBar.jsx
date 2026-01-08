@@ -88,8 +88,8 @@ const SearchBar = ({
        <div className="recent-floating">
         {!showRecent && (
           <button 
-            className="recent-btn"
-            title="Recent Searches"
+            className="recent-open-btn"
+            title="Recent Searches  "
             onClick={() => setShowRecent(true)}
             >
               <FaHistory />
