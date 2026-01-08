@@ -155,3 +155,109 @@ tbody tr:nth-child(even) {
 .table-scroll table {
   min-width: 1200px;
 }
+
+/* Recent search */
+.recent-floating {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  z-index: 1200;
+}
+
+.recent-btn {
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+.recent-open-btn {
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.recent-open-btn:hover {
+  background: #1d4ed8;
+}
+
+.recent-panel {
+  width: 260px;
+  max-height: 320px;
+  background: #ffffff;
+  border: 1px solid #d0d7e2;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  overflow-y: auto;
+  position: sticky;
+  z-index: 999;
+  top: 100px;
+  margin-left: auto;
+}
+
+.recent-header {
+  _attach {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    border-bottom: 1px solid #e5e73b;
+    background: #f3f6fa;
+  }
+}
+  .recent-close {
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .recent-close:hover{
+    color: #111827;
+  }
+
+  .recent-item {
+    padding: 12px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid #eef2f7;
+    font-size: 14px;
+  }
+
+  .recent-item:hover {
+    background: #f0f6ff;
+  }
+
+  .recent-item div {
+    line-height: 1.4;
+    color: #1f2937;
+  }
+
+  .recent-empty {
+    padding: 16px;
+    text-align: center;
+    font-size: 14px;
+    color: #6b7280;
+  }
+
+  .recent-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .recent-panel::-webkit-scrollbar-thumb {
+    background: #b5c7e3;
+    border-radius: 4px;
+  }
+
+  .recent-panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
