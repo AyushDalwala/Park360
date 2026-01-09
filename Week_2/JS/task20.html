@@ -1,0 +1,31 @@
+<!-- DOM -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM</title>
+</head>
+<body>
+    <h2 id="title">Hello</h2>
+    <button onclick="changeText()" id="btn">Click</button>
+
+    <script>
+        function changeText() {
+            document.getElementById("title").innerHTML = "Hello World";
+            let e1 = document.getElementById("title");
+            e1.style.color = "red";
+            e1.style.fontSize = "24px";
+
+            let div = document.createElement("div");
+            div.innerText = "New Element";
+            document.body.appendChild(div);
+
+            document.getElementById("btn").addEventListener("click", () => {
+                alert("Clicked");
+            })
+        }
+    </script>
+</body>
+</html>

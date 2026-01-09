@@ -11,12 +11,12 @@ function add(a, b) {
     return a + b;
 }
 
-console.log(add(3,3));
+console.log(add('3',3));
 
 
 //Arrow Function
 const multiply = (a, b) => a * b;
-console.log(multiply(4,2));
+console.log(multiply('4',2));
 
 
 //callback Function
@@ -26,7 +26,28 @@ function greetUser(name) {
 
 function processUser(callback){
     let username = "Ayush";
-    callback(username);
+    const addition = callback(4,5);
+    return addition;
 }
 
-processUser(greetUser);
+const addcallback = processUser(add);
+console.log(addcallback);
+
+
+//
+function calc (a, b, operation) {
+    return operation(a, b);
+}
+
+function add(x, y) {
+    return x + y;
+}
+
+function mul(x, y) {
+    const multi =  x * y;
+    return multi;
+}
+
+console.log();
+console.log(calc(5, 3, add));
+console.log(calc(5, 3, mul));

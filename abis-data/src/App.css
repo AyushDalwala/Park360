@@ -58,6 +58,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  position: relative;
 }
 
 /* LABEL */
@@ -190,7 +191,7 @@ tbody tr:nth-child(even) {
 
 .recent-panel {
   position: absolute;
-  top: 52px;
+  top: calc(100% + 8px);
   right: 0;
   width: 260px;
   max-height: 320px;
@@ -199,7 +200,7 @@ tbody tr:nth-child(even) {
   border-radius: 8px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.15);
   overflow-y: auto;
-  z-index: 10;
+  z-index: 100;
 }
 
 .recent-header {
@@ -259,3 +260,81 @@ tbody tr:nth-child(even) {
   .recent-panel::-webkit-scrollbar-track {
     background: transparent;
   }
+
+  /* =========================
+   MOBILE TABLE FIX
+   ========================= */
+@media (max-width: 768px) {
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    display: none; /* hide Field | Value header */
+  }
+
+  tbody tr {
+    margin-bottom: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    padding: 10px 12px;
+  }
+
+  td {
+    border: none;
+    padding: 6px 0;
+  }
+
+  td:first-child {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 2px;
+  }
+
+  td:last-child {
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+    word-break: break-word;
+  }
+}
+
+/* Vehicle row with location dropdown */
+.vehicle-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Location dropdown */
+.location-select {
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .vehicle-row {
+    flex-wrap: wrap;
+  }
+
+  .location-select {
+    width: 100%;
+  }
+}
+

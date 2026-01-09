@@ -18,3 +18,12 @@ function test() {
 }
 
 test();
+y = 7;
+
+if(true){
+    var username="data";
+    username="het";
+}
+
+console.log(username);
+

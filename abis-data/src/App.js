@@ -12,19 +12,19 @@ function App() {
   const [productNo, setProductNo] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
 
-  const saveRecentSearch = (entry) => {
-    const existing = JSON.parse(localStorage.getItem("recentSearches")) || [];
+  // const saveRecentSearch = (entry) => {
+  //   const existing = JSON.parse(localStorage.getItem("recentSearches")) || [];
 
-    const updated = [
-      entry,
-      ...existing.filter(
-        e =>
-          e.vehicleNo !== entry.vehicleNo || e.productNo !== entry.productNo
-      )
-    ].slice(0,5);
+  //   const updated = [
+  //     entry,
+  //     ...existing.filter(
+  //       e =>
+  //         e.vehicleNo !== entry.vehicleNo || e.productNo !== entry.productNo
+  //     )
+  //   ].slice(0,5);
 
-    localStorage.setItem("recentSearches", JSON.stringify(updated));
-  };
+  //   localStorage.setItem("recentSearches", JSON.stringify(updated));
+  // };
 
   const searchByVehicle = (value = vehicleNo) => {
       setHasSearched(true);

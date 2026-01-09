@@ -1,7 +1,8 @@
 import { FaHistory, FaSearch, FaTimes } from "react-icons/fa";
 import { useEffect, useState} from "react";
 
-const STORAGE_KEY = "abis_recent_searches";
+const VEHICE_KEY = "abis_vehicle_recent";
+const GATESLIP_KEY = "abis_gateslip_recent";
 
 const SearchBar = ({
     vehicleNo,
@@ -12,47 +13,114 @@ const SearchBar = ({
     onProductSearch
 }) => {
 
-  const [recentSearches, setRecentSearches] = useState([]);
-  const [showRecent, setShowRecent] = useState(false);
+  const [vehicleRecent, setVehicleRecent] = useState([]);
+  const [gateslipRecent, setGatesSlipRecent] = useState([]);
+
+  const [showVehicleRecent, setShowVehicleRecent] = useState(false);
+  const [showGatesSlipRecent, setShowGatesSlipRecent] = useState(false);
+
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState("");
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    setRecentSearches(data);
+    setVehicleRecent(JSON.parse(localStorage.getItem(VEHICE_KEY)) || []);
+    setGatesSlipRecent(JSON.parse(localStorage.getItem(GATESLIP_KEY)) || []);
   }, []);
 
-  const savedRecentSearch = (vehicle, product) => {
-    if (!vehicle && !product) return;
+  useEffect(() => {
+    fetch("http://192.168.0.9:8001/api/master/locationList", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer       eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYXN0ZXJfaWQiOjEsIm1hc3RlciI6eyJpZCI6MSwiaGFzaGNvZGUiOiI0OWJmNGZiNTRiNjBmMTA3YTU1NGU1OTllMTE1ZWFiYyIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpc19zdXBlcmFkbWluIjp0cnVlLCJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRVRUNMUFBYRmswYXY2SC5HVmZsVmFlRDB3NklEWWd0RXoxajRTQnluTkRkTGZ5TkpWcEtOeSIsImZvcmNlX3Jlc2V0X3Bhc3N3b3JkIjpmYWxzZX0sImlzX21hc3RlciI6dHJ1ZSwiaWF0IjoxNzY3OTM3MjE2LCJleHAiOjE3NjgwMjM2MTZ9.6is5KxwWgx1uz1M_EqmSod5UOe1b5AtC7cTMw3GpAls"
+      }
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        setLocations(res.data);
+      }
+    })
+    .catch(err => console.error("Location API error: ", err));
+  }, []);
 
-    const newEntry = {
-      vehicleNo: vehicle,
-      productNo: product,
-      time: Date.now()
-    };
+  // const savedRecentSearch = (vehicle, product) => {
+  //   if (!vehicle && !product) return;
 
-    let exisitng = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  //   const newEntry = {
+  //     vehicleNo: vehicle,
+  //     productNo: product,
+  //     time: Date.now()
+  //   };
 
-    exisitng = exisitng.filter(
-      item =>
-        item.vehicleNo !== vehicle || item.productNo !== product
-    );
+  //   let exisitng = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
-    const updated = [newEntry, ...exisitng].slice(0,5);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    setRecentSearches(updated);
-  };
+  //   exisitng = exisitng.filter(
+  //     item =>
+  //       item.vehicleNo !== vehicle || item.productNo !== product
+  //   );
+
+  //   const updated = [newEntry, ...exisitng].slice(0,5);
+  //   localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  //   setRecentSearches(updated);
+  // };
+
+  const saveVehicleRecent = (value) => {
+    if (!value) return;
+
+    let exisitng = JSON.parse(localStorage.getItem(VEHICE_KEY)) || [];
+    exisitng = exisitng.filter(v => v !== value);
+
+    const updated = [value, ...exisitng].slice(0,5);
+    localStorage.setItem(VEHICE_KEY, JSON.stringify(updated));
+    setVehicleRecent(updated);
+  }
+
+  const saveGatesSlipRecent = (value) => {
+    if (!value) return;
+
+    let exisitng = JSON.parse(localStorage.getItem(GATESLIP_KEY)) || [];
+    exisitng = exisitng.filter(v => v !== value);
+
+    const updated = [value, ...exisitng].slice(0,5);
+    localStorage.setItem(GATESLIP_KEY, JSON.stringify(updated));
+    setGatesSlipRecent(updated);
+  }
 
   const handleVehicleSearch = () => {
     onVehicleSearch();
-    savedRecentSearch(vehicleNo, "");
+    saveVehicleRecent(vehicleNo);
   };
 
   const handleProductSearch = () => {
     onProductSearch();
-    savedRecentSearch("", productNo);
+    saveGatesSlipRecent(productNo);
   }
 
   return (
     <div className="search-bar-row">
+
+      <div className="field-group">
+        <label>Select Location</label>
+        <div className="input-action vehicle-row">
+      
+        <select 
+          className="location-select"
+          value={selectedLocation}
+          onChange={e => setSelectedLocation(e.target.value)}
+        >
+          <option value="">Location</option>
+          {locations.map(loc => (
+            <option
+              key={loc.location_code}
+              value={loc.location_code}
+              >
+                {loc.name} ({loc.location_code})
+              </option>
+          ))}
+        </select>
+          
+        </div>
+      </div>
 
       <div className="field-group">
         <label>Vehicle No</label>
@@ -66,7 +134,45 @@ const SearchBar = ({
           <button onClick={handleVehicleSearch}>
             <FaSearch />
           </button>
+
+          <button 
+              className="recent-open-btn" 
+              onClick={() => {setShowVehicleRecent(v => !v);
+                setShowGatesSlipRecent(false);}
+              }
+              title="Vehicle History"
+          >
+              <FaHistory />
+          </button>
         </div>
+
+        {showVehicleRecent && (
+          <div className="recent-panel">
+            <div className="recent-header">
+              <span>Vehicle History</span>
+              <FaTimes onClick={() => setShowVehicleRecent(false)} />
+            </div>
+
+            {vehicleRecent.length === 0 ? (
+              <div className="recent-empty">No Recent Vehicles</div>
+            ): (
+              vehicleRecent.map((v, i) => (
+                <div
+                  key={i}
+                  className="recent-item"
+                  onClick={() => {
+                    setVehicleNo(v);
+                    setShowVehicleRecent(false);
+                    onVehicleSearch();
+                  }}
+                  >
+                    {v}
+                  </div>
+              ))
+            )}
+
+          </div>
+        )}
       </div>
 
       <div className="field-group">
@@ -81,11 +187,50 @@ const SearchBar = ({
           <button onClick={handleProductSearch}>
             <FaSearch />
           </button>
+
+          <button
+            className="recent-open-btn"
+            onClick={() => { setShowGatesSlipRecent(v => !v);
+              setShowVehicleRecent(false);
+            }}
+            title="Gateslip History"
+            >
+              <FaHistory />
+            </button>
       </div>
+
+      {showGatesSlipRecent && (
+        <div className="recent-panel">
+          <div className="recent-header">
+            <span>Gateslip History</span>
+            <FaTimes onClick={() => setShowGatesSlipRecent(false)} />
+          </div>
+
+          {gateslipRecent.length === 0 ? (
+            <div className="recent-empty">No recent gateslips</div>
+          ) : (
+            gateslipRecent.map((g, i) => (
+              <div
+                key={i}
+                className="recent-item"
+                onClick={() => {
+                  setProductNo(g);
+                  setShowGatesSlipRecent(false);
+                  onProductSearch();
+                }}
+              >
+                {g}
+              </div>
+            ))
+          )}
+
+        </div>
+      )}
+
       </div>
 
       
-       <div className="recent-floating">
+       {/* <div className="recent-floating">
         {!showRecent && (
           <button 
             className="recent-open-btn"
@@ -134,7 +279,7 @@ const SearchBar = ({
           )}
           </div>
         )}
-       </div>
+       </div> */}
 
     </div>
   );

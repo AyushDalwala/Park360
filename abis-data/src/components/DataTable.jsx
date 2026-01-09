@@ -20,6 +20,8 @@ const DataTable = ({ data, onClear, hasSearched }) => {
     <div className="table-container">
 
         <h3 style={{marginTop: "20px"}}>Records</h3>
+
+    <div className="record0table">
       <table>
         <thead>
           <tr>
@@ -42,6 +44,7 @@ const DataTable = ({ data, onClear, hasSearched }) => {
           })}
         </tbody>
       </table>
+    </div>
 
         {gateItems.length > 0 && (
             <>
