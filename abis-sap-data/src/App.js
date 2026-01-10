@@ -1,34 +1,92 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './components/Header';
 import SearchFilter from './components/SearchFilter';
 import DataTable from './components/DataTable';
 import './App.css';
 
 function App() {
-  const [data, setData] = useState([
-    { gateSlip: '6204037108', vehicle: 'RJ18GC7704', driver: 'KARAMVEER', plant: 'OB10', entryDate: '2025-03-11' },
-    { gateSlip: '6204035955', vehicle: 'UP41BT7155', driver: 'ARJUN PAL', plant: 'OB10', entryDate: '2025-03-11' },
-    { gateSlip: '6204037116', vehicle: 'MH19CY4924', driver: 'SHAIKH', plant: 'OB10', entryDate: '2025-03-11' },
-    { gateSlip: '6204037397', vehicle: 'UP36T3180', driver: 'NIYAZ ALI', plant: 'N431', entryDate: '2025-03-11' },
-    { gateSlip: '6204037163', vehicle: 'MP44HA1137', driver: 'pramod', plant: 'N209', entryDate: '2025-03-11' },
-  ]);
+    const [searchFilter, setSearchFilter] = useState({
+      vehicleNo: "",
+      gateslipNo: "",
+      location: "",
+      fromDate: "",
+      toDate: ""
+    });
 
-  const handleSearch = (filters) => {
-    const { vehicle, gate, location } = filters;
-    const filteredData = data.filter(item =>
-      item.vehicle.includes(vehicle) &&
-      item.gateSlip.includes(gate) &&
-      item.plant.includes(location)
-    );
-    setData(filteredData);
-  };
+    const [tableData, setTableData] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchSapData = async (filters = searchFilter, isClear = false) => {
+
+      if (isClear){
+        setTableData([]);
+        return;
+      }
+
+      // if (!searchFilter.location) {
+      //   alert("Location is required");
+      //   return;
+      // }
+
+      setLoading(true);
+
+      const payload = {
+         toDate: searchFilter.toDate,
+        fromDate: searchFilter.fromDate,
+        location_id: searchFilter.location,
+        vehicle_no: searchFilter.vehicleNo,
+        request_data: "",
+        gate_slip: searchFilter.gateslipNo,
+        iColumns: 13,
+        sColumns: ",,,,,,,,,,,",
+        iDisplayStart: 0,
+        iDisplayLength: 10,
+        sEcho: 1
+      };
+
+      try {
+        const response = await fetch (
+           "http://192.168.0.114:8001/api/abis/sapdata",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+          }
+        );
+
+        const result = await response.json();
+        console.log("API response: ", result);
+
+        if (Array.isArray(result.data?.data)) {
+          setTableData(result.data.data);
+        } else {
+          setTableData([]);
+        }
+         
+      } catch (error) {
+        console.error("SAP API Error: ", error);
+        setTableData([]);
+      } finally {
+        setLoading(false);
+      }
+     
+    };
+
+    useEffect(() => {
+      fetchSapData();
+    }, []);
 
   return (
     <div className="App">
       <Header />
       <div className="container">
-        <SearchFilter onSearch={handleSearch} />
-        <DataTable data={data} />
+        <SearchFilter onSearch={fetchSapData}
+          setSearchFilter={setSearchFilter}
+          searchFilter={searchFilter}
+        />
+        <DataTable data={tableData} loading={loading} />
       </div>
     </div>
   );

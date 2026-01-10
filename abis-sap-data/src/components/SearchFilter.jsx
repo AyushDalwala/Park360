@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaRedo } from 'react-icons/fa';
 
-const SearchFilter = ({ onSearch }) => {
+const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
   const [vehicle, setVehicle] = useState('');
   const [gate, setGate] = useState('');
   
@@ -31,58 +31,127 @@ const SearchFilter = ({ onSearch }) => {
   };
 
   const handleClear = () => {
-    setVehicle('');
-    setGate('');
-    setSelectedLocation('');
-    onSearch({ vehicle: '', gate: '', location: '' });
+    const clearedFilters = {
+        ...searchFilter,
+        vehicleNo: "",
+        gateslipNo: "",
+        location: ""
+    };
+    setSearchFilter(clearedFilters);
+    onSearch(clearedFilters, true);
   };
 
   return (
-    <div className="search-filter shadow-sm p-3 mb-4 bg-white rounded">
-      <div className="row g-3">
-        <div className="col-md-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter Vehicle No"
-            value={vehicle}
-            onChange={(e) => setVehicle(e.target.value)}
-          />
-        </div>
-        <div className="col-md-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter Gateslip No"
-            value={gate}
-            onChange={(e) => setGate(e.target.value)}
-          />
-        </div>
-        <div className="col-md-3">
-          <select
-            className="form-select"
-            placeholder="Select Location"
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-          >
-            <option value="">Location</option>
-            {location.map(loc => (
-                <option
-                    key={loc.hashcode}
-                    value={loc.hashcode}
-                >
-                    {loc.name}
+    <div className="card shadow-sm mb-4">
+      <div className="card-body">
+        <div className="row g-3 align-items-end">
+
+          {/* Vehicle No */}
+          <div className="col-md-3">
+            <label className="form-label fw-semibold">Vehicle No</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter vehicle number"
+              value={searchFilter.vehicleNo}
+              onChange={(e) =>
+                setSearchFilter({ ...searchFilter, vehicleNo: e.target.value })
+              }
+            />
+          </div>
+
+          {/* Gate Slip */}
+          <div className="col-md-3">
+            <label className="form-label fw-semibold">Gate Slip No</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter gate slip number"
+              value={searchFilter.gateslipNo}
+              onChange={(e) =>
+                setSearchFilter({ ...searchFilter, gateslipNo: e.target.value })
+              }
+            />
+          </div>
+
+          {/* Location */}
+          <div className="col-md-3">
+            <label className="form-label fw-semibold">Location</label>
+            <select
+              className="form-select"
+              value={searchFilter.location}
+              onChange={(e) =>
+                setSearchFilter({ ...searchFilter, location: e.target.value })
+              }
+            >
+              <option value="">Select location</option>
+              {location.map(loc => (
+                <option key={loc.hashcode} value={loc.hashcode}>
+                  {loc.name}
                 </option>
-            ))}
-          </select>
+              ))}
+            </select>
+          </div>
+
+        <div className="col-md-3">
+            <label className="form-label fw-semibold">Search</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search ...."
+            //   value={searchFilter.gateslipNo}
+            //   onChange={(e) =>
+            //     setSearchFilter({ ...searchFilter, gateslipNo: e.target.value })
+            //   }
+            />
+          </div>
+
+            {/* From Date */}
+          <div className="col-md-3">
+            <label className="form-label fw-semibold">From Date</label>
+            <input
+              type="date"
+              className="form-control"
+              value={searchFilter.fromDate || ""}
+              onChange={(e) =>
+                setSearchFilter({ ...searchFilter, fromDate: e.target.value })
+              }
+            />
+          </div>
+
+          {/* To Date */}
+          <div className="col-md-3">
+            <label className="form-label fw-semibold">To Date</label>
+            <input
+              type="date"
+              className="form-control"
+              value={searchFilter.toDate || ""}
+              onChange={(e) =>
+                setSearchFilter({ ...searchFilter, toDate: e.target.value })
+              }
+            />
+          </div>
+        
+        <div className="col-12 d-flex justify-content-end gap-2">
+
+          {/* Buttons */}
+          <div className="col-md-3 d-flex gap-2">
+            <button
+              className="btn btn-primary w-100"
+              onClick={() => onSearch(searchFilter)}
+              disabled={!searchFilter.location}
+            >
+              <FaSearch /> Search
+            </button>
+            <button
+              className="btn btn-outline-secondary w-100"
+              onClick={handleClear}
+            >
+              <FaRedo /> Clear
+            </button>
+          </div>
         </div>
-        <div className="col-md-3 d-flex gap-2">
-          <button className="btn btn-primary flex-grow-1" onClick={handleSearch}>
-            <FaSearch /> Search
-          </button>
-          <button className="btn btn-secondary flex-grow-1" onClick={handleClear}>
-            <FaRedo /> Clear
-          </button>
+
         </div>
       </div>
     </div>
