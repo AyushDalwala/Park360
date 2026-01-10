@@ -114,7 +114,7 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
               className="form-control"
               value={searchFilter.fromDate || ""}
               onChange={(e) =>
-                setSearchFilter({ ...searchFilter, fromDate: e.target.value })
+                setSearchFilter({ ...searchFilter, fromDate: e.target.value, toDate: "" })
               }
             />
           </div>
@@ -126,6 +126,8 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
               type="date"
               className="form-control"
               value={searchFilter.toDate || ""}
+              min={searchFilter.fromDate}
+              disabled={!searchFilter.fromDate}
               onChange={(e) =>
                 setSearchFilter({ ...searchFilter, toDate: e.target.value })
               }

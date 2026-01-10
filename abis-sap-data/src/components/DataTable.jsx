@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DataTable = ({ data, loading }) => {
+const DataTable = ({ data, loading, onView }) => {
 
     if (loading) {
         return <div className="text-center">Loading...</div>;
@@ -13,11 +13,13 @@ const DataTable = ({ data, loading }) => {
         <table className='table table-bordered table-striped mt-3'>
             <thead>
                 <tr>
+                    <th>ID</th>
+                    <th>Vehichle No</th>
                     <th>Gate Slip</th>
-                    <th>Vehichle</th>
                     <th>Driver</th>
                     <th>Plant</th>
                     <th>Entry Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
@@ -34,11 +36,18 @@ const DataTable = ({ data, loading }) => {
                     
                         return (
                             <tr key={index}>
-                                <td>{raw.GATESLIP ?? "-"}</td>
+                                <td>{row.id}</td>
                                 <td>{row.vehicle_no ?? "-"}</td>
+                                <td>{raw.GATESLIP ?? "-"}</td>
                                 <td>{raw.DRIVERNAME ?? "-"}</td>
                                 <td>{raw.PLANT ?? "-"}</td>
                                 <td>{row.created_at ?? "-"}</td>
+                                <td>
+                                    <button
+                                        className="btn btn-link p-0"
+                                        onClick={() => onView(row.raw_data)}
+                                        >View</button>
+                                </td>
                             </tr>
                         ); 
                     })
