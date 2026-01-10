@@ -10,7 +10,8 @@ const SearchBar = ({
     productNo,
     setProductNo,
     onVehicleSearch,
-    onProductSearch
+    onProductSearch,
+    setSapData
 }) => {
 
   const [vehicleRecent, setVehicleRecent] = useState([]);
@@ -22,6 +23,8 @@ const SearchBar = ({
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setVehicleRecent(JSON.parse(localStorage.getItem(VEHICE_KEY)) || []);
     setGatesSlipRecent(JSON.parse(localStorage.getItem(GATESLIP_KEY)) || []);
@@ -31,7 +34,7 @@ const SearchBar = ({
     fetch("http://192.168.0.9:8001/api/master/locationList", {
       method: "GET",
       headers: {
-        Authorization: "Bearer       eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYXN0ZXJfaWQiOjEsIm1hc3RlciI6eyJpZCI6MSwiaGFzaGNvZGUiOiI0OWJmNGZiNTRiNjBmMTA3YTU1NGU1OTllMTE1ZWFiYyIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpc19zdXBlcmFkbWluIjp0cnVlLCJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRVRUNMUFBYRmswYXY2SC5HVmZsVmFlRDB3NklEWWd0RXoxajRTQnluTkRkTGZ5TkpWcEtOeSIsImZvcmNlX3Jlc2V0X3Bhc3N3b3JkIjpmYWxzZX0sImlzX21hc3RlciI6dHJ1ZSwiaWF0IjoxNzY3OTM3MjE2LCJleHAiOjE3NjgwMjM2MTZ9.6is5KxwWgx1uz1M_EqmSod5UOe1b5AtC7cTMw3GpAls"
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYXN0ZXJfaWQiOjEsIm1hc3RlciI6eyJpZCI6MSwiaGFzaGNvZGUiOiI0OWJmNGZiNTRiNjBmMTA3YTU1NGU1OTllMTE1ZWFiYyIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpc19zdXBlcmFkbWluIjp0cnVlLCJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRVRUNMUFBYRmswYXY2SC5HVmZsVmFlRDB3NklEWWd0RXoxajRTQnluTkRkTGZ5TkpWcEtOeSIsImZvcmNlX3Jlc2V0X3Bhc3N3b3JkIjpmYWxzZX0sImlzX21hc3RlciI6dHJ1ZSwiaWF0IjoxNzY4MDI2NzQwLCJleHAiOjE3NjgxMTMxNDB9.6KUUKofRroE0JpEtJRtiM_0twQtfTOoCn2KBvjFWUxc"
       }
     })
     .then(res => res.json())
@@ -42,6 +45,50 @@ const SearchBar = ({
     })
     .catch(err => console.error("Location API error: ", err));
   }, []);
+
+  const handleLocationSearch = () => {
+  if (!selectedLocation) {
+    alert("Please select a location");
+    return;
+  }
+
+  setLoading(true);
+//  setHasSearched(true);
+
+  fetch("http://192.168.0.114:8001/api/abis/sapdata", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      // Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYXN0ZXJfaWQiOjEsIm1hc3RlciI6eyJpZCI6MSwiaGFzaGNvZGUiOiI0OWJmNGZiNTRiNjBmMTA3YTU1NGU1OTllMTE1ZWFiYyIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpc19zdXBlcmFkbWluIjp0cnVlLCJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRVRUNMUFBYRmswYXY2SC5HVmZsVmFlRDB3NklEWWd0RXoxajRTQnluTkRkTGZ5TkpWcEtOeSIsImZvcmNlX3Jlc2V0X3Bhc3N3b3JkIjpmYWxzZX0sImlzX21hc3RlciI6dHJ1ZSwiaWF0IjoxNzY3OTM3MjE2LCJleHAiOjE3NjgwMjM2MTZ9.6is5KxwWgx1uz1M_EqmSod5UOe1b5AtC7cTMw3GpAls"
+    },
+    body: JSON.stringify({
+      toDate: "01-01-2026",
+      fromDate: "01-01-2026",
+      location_id: selectedLocation,
+      vehicle_no: vehicleNo,
+      request_data: "",
+      gate_slip: productNo,
+      iColumns: 13,
+      sColumns: ",,,,,,,,,,,",
+      iDisplayStart: 0,
+      iDisplayLength: 10,
+      sEcho: 1
+    })
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log("SAP Response: ", res);
+      console.log("Table Data", res.data?.data);
+      if (res.success && Array.isArray(res.data?.data)) {
+        setSapData(res.data.data);
+      } else {
+        setSapData([]);
+      }
+    })
+    .catch(err => console.error("SAP API error:", err))
+    .finally(() => setLoading(false));
+};
+
 
   // const savedRecentSearch = (vehicle, product) => {
   //   if (!vehicle && !product) return;
@@ -111,13 +158,17 @@ const SearchBar = ({
           <option value="">Location</option>
           {locations.map(loc => (
             <option
-              key={loc.location_code}
-              value={loc.location_code}
+              key={loc.hashcode}
+              value={loc.hashcode}
               >
-                {loc.name} ({loc.location_code})
+                {loc.name}
               </option>
           ))}
         </select>
+
+        <button onClick={handleLocationSearch}>
+            <FaSearch />
+          </button>
           
         </div>
       </div>
@@ -281,7 +332,42 @@ const SearchBar = ({
         )}
        </div> */}
 
+       {/* {loading && <p style={{ marginTop: "20px" }}>Loading data...</p>}
+
+{!loading && sapData.length > 0 && (
+  <div className="table-wrapper">
+    <table className="sap-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Vehicle No</th>
+          <th>Gate Slip</th>
+          <th>Location</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sapData.map((row, index) => (
+          <tr key={index}>
+            <td>{index + 1}</td>
+           
+            <td>{row.gate_slip}</td>
+           
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+
+{!loading && sapData.length === 0 && (
+  <p style={{ marginTop: "20px" }}>No data found</p>
+)} */}
+
+
     </div>
+    
   );
 };
 

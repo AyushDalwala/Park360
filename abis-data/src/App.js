@@ -3,6 +3,7 @@ import SearchBar from "./components/SearchBar";
 import DataTable from "./components/DataTable";
 import { useState } from "react";
 import data from "./data/abis_sap_data.json";
+import LocationTable from "./components/LocationTable";
 import "./App.css";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const [vehicleNo, setVehicleNo] = useState("");
   const [productNo, setProductNo] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
+  const [sapData, setSapData] = useState([]);
 
   // const saveRecentSearch = (entry) => {
   //   const existing = JSON.parse(localStorage.getItem("recentSearches")) || [];
@@ -61,11 +63,17 @@ function App() {
           setProductNo={setProductNo}
           onVehicleSearch={searchByVehicle}
           onProductSearch={searchByProduct}
+          setSapData={setSapData}
+          setHasSearched={setHasSearched}
         />
         <DataTable 
           data={filteredData}
           onClear={clearAll}
           hasSearched={hasSearched}
+        />
+
+        <LocationTable
+         
         />
       </div>
     </>
