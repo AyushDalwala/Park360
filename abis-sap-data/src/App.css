@@ -5,12 +5,21 @@ body {
 
 .header {
   background-color: #e3f2fd;
+  justify-content: flex-start;
 }
 
 .logo {
-  width: 40px;
-  height: 40px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  height: 50px;
 }
+
+.custom-header {
+  background-color: #5dade2; /* light but professional blue */
+  color: #ffffff;
+}
+
 
 .search-filter input {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -23,4 +32,105 @@ body {
 .table th, .table td {
   vertical-align: middle !important;
 }
+
+.recent-chip-container{
+  margin-top: 12px;
+  margin-bottom: 16px;
+}
+
+.recent-chip-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.recent-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background-color: #f1f3f5;
+  color: #0d6efd;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.recent-search-container {
+  margin-top: 12px;
+  margin-bottom: 32px;   /* 👈 increase this */
+  padding: 8px 4px;
+}
+
+.recent-chip:hover {
+  background-color: #e7f1ff;
+}
+
+.recent-chip-close {
+  margin-left: 4px;
+  font-size: 14px;
+  color: #6c757d;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.recent-chip-close:hover {
+  color: #dc3545;
+}
+
+/* Top slide alert modal */
+.custom-alert-modal {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1055;
+  animation: slideDown 0.3s ease-out;
+}
+
+.custom-alert-content {
+  width: 320px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Header */
+.custom-alert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Body */
+.custom-alert-body {
+  padding: 16px;
+  text-align: center;
+}
+
+/* Footer */
+.custom-alert-footer {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: flex-end; /* 👈 right side */
+  border-top: 1px solid #e9ecef;
+}
+
+/* Slide animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
 

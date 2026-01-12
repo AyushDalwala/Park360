@@ -5,45 +5,83 @@ const STORAGE_KEY = "abis_recent_searches";
 const SearchHistory = ({ onSelect }) => {
   const [history, setHistory] = useState([]);
 
+  // useEffect(() => {
+  //   const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  //   setHistory(data);
+  // }, []);
+
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-    setHistory(data);
+    const loadHistory = () => {
+      const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      setHistory(data);
+    };
+
+    loadHistory();
+
+    window.addEventListener("abis-history-update", loadHistory);
+
+    return() => {
+      window.removeEventListener("abis-history-update", loadHistory);
+    };
   }, []);
 
   if (!history.length) return null;
 
-  return (
-    <div
-      className="position-absolute"
-      style={{
-        top: "97px", // move it just below the header/form
-        left: "10px", // align with form's left
-        zIndex: 1050, // make sure it is above other content
-        width: "180px",
-      }}
-    >
-      <div className="card shadow-sm">
-        <div className="card-header fw-semibold">Vehicle History</div>
-        <ul className="list-group list-group-flush">
-          {history.map((item, idx) => (
-            <li
-              key={idx}
-              className="list-group-item list-group-item-action"
-              style={{ cursor: "pointer" }}
-              onClick={() => onSelect(item)}
-            >
-              <div className="fw-bold">
-                 {item.vehicleNo || "-"} {item.gateslipNo ? `| ${item.gateslipNo}` : ""}
-              </div>
-              <small className="text-muted">
-                {item.fromDate || "-"} → {item.toDate || "-"}
-              </small>
-            </li>
-          ))}
-        </ul>
-      </div>
+ return (
+  <div className="recent-search-container">
+
+    <div className="fw-semibold mb-2 text-muted px-1">
+      Recent searches
     </div>
-  );
+
+    <div className="recent-chip-wrapper">
+      {history.map((item, idx) => {
+        const dateRange =
+          item.fromDate || item.toDate
+            ? `${item.fromDate || "-"} → ${item.toDate || "-"}`
+            : "";
+
+        const label =
+          item.vehicleNo
+            ? `Vehicle No: ${item.vehicleNo}`
+            : item.gateslipNo
+            ? `Gate Slip: ${item.gateslipNo}`
+            : item.searchText
+            ? item.searchText
+            : dateRange
+            ? dateRange
+            : "All Vehicles";
+
+        return (
+          <div
+            key={idx}
+            className="recent-chip"
+            onClick={() => onSelect(item)}
+          >
+            <span className="recent-chip-text">{label}</span>
+
+            <span
+              className="recent-chip-close"
+              title="Remove"
+              onClick={(e) => {
+                e.stopPropagation();
+                const updated = history.filter((_, i) => i !== idx);
+                localStorage.setItem(
+                  STORAGE_KEY,
+                  JSON.stringify(updated)
+                );
+                setHistory(updated);
+              }}
+            >
+              ×
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+);
+
 };
 
 export default SearchHistory;

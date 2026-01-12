@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaRedo } from 'react-icons/fa';
 
+
+
 const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
   const [vehicle, setVehicle] = useState('');
   const [gate, setGate] = useState('');
@@ -8,13 +10,15 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
   
   const [location, setLocation] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState("");
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
+    //console.log("showLocationModal:", showLocationModal);
 
   useEffect(() => {
     fetch("http://192.168.0.9:8001/api/master/locationList", {
       method: "GET",
       headers: {
-        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYXN0ZXJfaWQiOjEsIm1hc3RlciI6eyJpZCI6MSwiaGFzaGNvZGUiOiI0OWJmNGZiNTRiNjBmMTA3YTU1NGU1OTllMTE1ZWFiYyIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpc19zdXBlcmFkbWluIjp0cnVlLCJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRVRUNMUFBYRmswYXY2SC5HVmZsVmFlRDB3NklEWWd0RXoxajRTQnluTkRkTGZ5TkpWcEtOeSIsImZvcmNlX3Jlc2V0X3Bhc3N3b3JkIjpmYWxzZX0sImlzX21hc3RlciI6dHJ1ZSwiaWF0IjoxNzY4MDI2NzQwLCJleHAiOjE3NjgxMTMxNDB9.6KUUKofRroE0JpEtJRtiM_0twQtfTOoCn2KBvjFWUxc"
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYXN0ZXJfaWQiOjEsIm1hc3RlciI6eyJpZCI6MSwiaGFzaGNvZGUiOiI0OWJmNGZiNTRiNjBmMTA3YTU1NGU1OTllMTE1ZWFiYyIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJpc19zdXBlcmFkbWluIjp0cnVlLCJuYW1lIjoiYWRtaW4iLCJwYXNzd29yZCI6IiQyYiQxMCRVRUNMUFBYRmswYXY2SC5HVmZsVmFlRDB3NklEWWd0RXoxajRTQnluTkRkTGZ5TkpWcEtOeSIsImZvcmNlX3Jlc2V0X3Bhc3N3b3JkIjpmYWxzZX0sImlzX21hc3RlciI6dHJ1ZSwiaWF0IjoxNzY4MTk0NTQ3LCJleHAiOjE3NjgyODA5NDd9.Goe2bEo5RLwhF8FlQcQbtw1nBV6rYr5jD7IA67ZyXOY"
       }
     })
     .then(res => res.json())
@@ -35,16 +39,38 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
         ...searchFilter,
         vehicleNo: "",
         gateslipNo: "",
-        location: ""
+        fromDate: "",
+        toDate: "",
+        searchText: ""
     };
     setSearchFilter(clearedFilters);
-    onSearch(clearedFilters, true);
+    onSearch(clearedFilters, false);
   };
 
   return (
+    <>
     <div className="card shadow-sm mb-4">
       <div className="card-body">
         <div className="row g-3 align-items-end">
+
+        {/* Location */}
+          {/* <div className="col-md-3">
+            <label className="form-label fw-semibold">Location</label>
+            <select
+              className="form-select"
+              value={searchFilter.location}
+              onChange={(e) =>
+                setSearchFilter({ ...searchFilter, location: e.target.value })
+              }
+            >
+              <option value="">Select location</option>
+              {location.map(loc => (
+                <option key={loc.hashcode} value={loc.hashcode}>
+                  {loc.name}
+                </option>
+              ))}
+            </select>
+          </div> */}
 
           {/* Vehicle No */}
           <div className="col-md-3">
@@ -74,24 +100,7 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
             />
           </div>
 
-          {/* Location */}
-          <div className="col-md-3">
-            <label className="form-label fw-semibold">Location</label>
-            <select
-              className="form-select"
-              value={searchFilter.location}
-              onChange={(e) =>
-                setSearchFilter({ ...searchFilter, location: e.target.value })
-              }
-            >
-              <option value="">Select location</option>
-              {location.map(loc => (
-                <option key={loc.hashcode} value={loc.hashcode}>
-                  {loc.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          
 
         <div className="col-md-3">
             <label className="form-label fw-semibold">Search</label>
@@ -99,11 +108,15 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
               type="text"
               className="form-control"
               placeholder="Search ...."
-            //   value={searchFilter.gateslipNo}
-            //   onChange={(e) =>
-            //     setSearchFilter({ ...searchFilter, gateslipNo: e.target.value })
-            //   }
+              value={searchFilter.searchText}
+              onChange={(e) =>
+                setSearchFilter({ ...searchFilter, searchText: e.target.value })
+              }
             />
+          </div>
+
+          <div className="col-md-3">
+
           </div>
 
             {/* From Date */}
@@ -140,8 +153,12 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
           <div className="col-md-3 d-flex gap-2">
             <button
               className="btn btn-primary w-100"
-              onClick={() => onSearch(searchFilter)}
-              disabled={!searchFilter.location}
+              onClick={() => { 
+                // if (!searchFilter.location) {
+                //   setShowLocationModal(true);
+                //   return;
+                // }
+                onSearch(searchFilter)}}
             >
               <FaSearch /> Search
             </button>
@@ -157,6 +174,45 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
         </div>
       </div>
     </div>
+
+      {/* 🔔 Location Required Modal */}
+{showLocationModal && (
+  <>
+    {/* Backdrop */}
+    <div className="modal-backdrop fade show"></div>
+
+    {/* Modal */}
+    <div className="custom-alert-modal">
+      <div className="custom-alert-content">
+        <div className="custom-alert-header">
+          <span className="fw-semibold">Alert</span>
+          <button
+            className="btn-close"
+            onClick={() => setShowLocationModal(false)}
+          ></button>
+        </div>
+
+        <div className="custom-alert-body">
+          <p className="text-danger fw-semibold mb-0">
+            Location is compulsory
+          </p>
+        </div>
+
+        <div className="custom-alert-footer">
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={() => setShowLocationModal(false)}
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </>
+)}
+
+
+    </>
   );
 };
 

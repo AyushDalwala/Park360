@@ -6,6 +6,16 @@ const DataTable = ({ data, loading, onView }) => {
         return <div className="text-center">Loading...</div>;
     }
 
+//     const formatDate = (dateStr) => {
+//   if (!dateStr) return "-";
+//   const date = new Date(dateStr);
+//   const dd = String(date.getDate()).padStart(2, "0");
+//   const mm = String(date.getMonth() + 1).padStart(2, "0");
+//   const yyyy = date.getFullYear();
+//   return `${dd}-${mm}-${yyyy}`;
+// };
+
+
   return (
     <div className='shadow-sm p-3 bg-white rounded'>
         <h5>SAP Location Data</h5>
@@ -13,12 +23,14 @@ const DataTable = ({ data, loading, onView }) => {
         <table className='table table-bordered table-striped mt-3'>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>SR No.</th>
                     <th>Vehichle No</th>
+                    <th>Vehicle Type</th>
                     <th>Gate Slip</th>
                     <th>Driver</th>
                     <th>Plant</th>
-                    <th>Entry Date</th>
+                    <th>Gatepass Count</th>
+                    <th>Entry Date & Time</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -36,12 +48,17 @@ const DataTable = ({ data, loading, onView }) => {
                     
                         return (
                             <tr key={index}>
-                                <td>{row.id}</td>
+                                <td>{index + 1}</td>
                                 <td>{row.vehicle_no ?? "-"}</td>
+                                <td>{raw.VEHTYPE ?? "-"}</td>
                                 <td>{raw.GATESLIP ?? "-"}</td>
                                 <td>{raw.DRIVERNAME ?? "-"}</td>
                                 <td>{raw.PLANT ?? "-"}</td>
-                                <td>{row.created_at ? row.created_at.replace("T", " ").split(".")[0] : "-"}</td>
+                                <td>{raw.GATEPASS_ITEM.length}</td>
+                                <td>
+                                    {raw.ENTRYDATE ? raw.ENTRYDATE.replace("T", " ").split(".")[0] : "-"}
+                                    &nbsp;&nbsp;
+                                    {raw.ENTRYTIME ? raw.ENTRYTIME.replace("T", " ").split(".")[0] : "-"}</td>
                                 <td>
                                     <button
                                         className="btn btn-secondary"
@@ -53,7 +70,7 @@ const DataTable = ({ data, loading, onView }) => {
                     })
                 ) : (
                     <tr>
-                        <td colSpan="7" className='text-center'>
+                        <td colSpan="9" className='text-center'>
                             No Data Found
                         </td>
                     </tr>
