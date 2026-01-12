@@ -4,6 +4,7 @@ import SearchFilter from './components/SearchFilter';
 import DataTable from './components/DataTable';
 import Pagination from './components/Pagination';
 import Modal from './components/Modal';
+import SearchHistory from './components/SearchHistory';
 import './App.css';
 
 function App() {
@@ -25,6 +26,27 @@ function App() {
     const [showModal, setShowModal] = useState(false);
     const [viewData, setViewData] = useState(null);
 
+
+    const STORAGE_KEY = "abis_recent_searches";
+
+    const saveSearchToHistory = (filters) => {
+    const prev = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+    // remove duplicate searches
+    const filtered = prev.filter(
+    item => JSON.stringify(item) !== JSON.stringify(filters)
+    );
+
+    const updated = [filters, ...filtered].slice(0, 5);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+};
+
+  const getSearchHistory = () => {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  };
+
+
     const openModal = (rawData) => {
       try {
           setViewData(JSON.parse(rawData));
@@ -40,12 +62,17 @@ function App() {
       setViewData(null);
     }
 
+    const handleHistorySelect = (filters) => {
+      setSearchFilter(filters);
+      fetchSapData(filters, false, 1, pageSize);
+    };
+
 
     const formatDate = (dateStr) => {
-   if (!dateStr) return "";
-  const [yyyy, mm, dd] = dateStr.split("-");
-  return `${dd}-${mm}-${yyyy}`;
-};
+      if (!dateStr) return "";
+      const [yyyy, mm, dd] = dateStr.split("-");
+      return `${dd}-${mm}-${yyyy}`;
+    };
 
 
     const fetchSapData = async (
@@ -62,6 +89,10 @@ function App() {
       //   alert("Location is required");
       //   return;
       // }
+
+      if (page === 1) {
+        saveSearchToHistory(filters);
+      }
 
       setLoading(true);
 
@@ -142,6 +173,8 @@ function App() {
           onClose={closeModal}
           data={viewData}
         />
+
+        <SearchHistory onSelect={handleHistorySelect} />
       </div>
     </div>
   );

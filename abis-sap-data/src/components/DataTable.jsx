@@ -41,10 +41,10 @@ const DataTable = ({ data, loading, onView }) => {
                                 <td>{raw.GATESLIP ?? "-"}</td>
                                 <td>{raw.DRIVERNAME ?? "-"}</td>
                                 <td>{raw.PLANT ?? "-"}</td>
-                                <td>{row.created_at ?? "-"}</td>
+                                <td>{row.created_at ? row.created_at.replace("T", " ").split(".")[0] : "-"}</td>
                                 <td>
                                     <button
-                                        className="btn btn-link p-0"
+                                        className="btn btn-secondary"
                                         onClick={() => onView(row.raw_data)}
                                         >View</button>
                                 </td>
@@ -53,7 +53,7 @@ const DataTable = ({ data, loading, onView }) => {
                     })
                 ) : (
                     <tr>
-                        <td colSpan="5" className='text-center'>
+                        <td colSpan="7" className='text-center'>
                             No Data Found
                         </td>
                     </tr>
