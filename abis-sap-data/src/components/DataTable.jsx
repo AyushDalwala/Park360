@@ -17,10 +17,10 @@ const DataTable = ({ data, loading, onView }) => {
 
 
   return (
-    <div className='shadow-sm p-3 bg-white rounded'>
+    <div className='p-3 bg-white'>
         <h5>SAP Location Data</h5>
-
-        <table className='table table-bordered table-striped mt-3'>
+        <div className="SrTableWrapper">
+        <table className='shadow-sm rounded table table-bordered table-striped mt-3'>
             <thead>
                 <tr>
                     <th>SR No.</th>
@@ -77,6 +77,7 @@ const DataTable = ({ data, loading, onView }) => {
                 )}
             </tbody>
         </table>
+        </div>
     </div>
   );
 };

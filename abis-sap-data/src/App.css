@@ -16,7 +16,7 @@ body {
 }
 
 .custom-header {
-  background-color: #5dade2; /* light but professional blue */
+  background-color: #5dade2;
   color: #ffffff;
 }
 
@@ -60,7 +60,7 @@ body {
 
 .recent-search-container {
   margin-top: 12px;
-  margin-bottom: 32px;   /* 👈 increase this */
+  margin-bottom: 32px;
   padding: 8px 4px;
 }
 
@@ -117,7 +117,7 @@ body {
 .custom-alert-footer {
   padding: 10px 14px;
   display: flex;
-  justify-content: flex-end; /* 👈 right side */
+  justify-content: flex-end;
   border-top: 1px solid #e9ecef;
 }
 
@@ -131,6 +131,25 @@ body {
     opacity: 1;
     transform: translate(-50%, 0);
   }
+}
+
+/* Mobile responsive table */
+.SrTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.SrTableWrapper table {
+  min-width: 900px; /* adjust if needed */
+  white-space: nowrap;
+}
+
+/* Prevent ugly wrapping */
+.table th,
+.table td {
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 

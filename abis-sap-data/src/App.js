@@ -8,6 +8,10 @@ import SearchHistory from './components/SearchHistory';
 import './App.css';
 
 function App() {
+
+    const STORAGE_KEY = "abis_recent_searches";
+    const ACTIVE_FILTER_KEY = "abis_active_search";
+
     const [searchFilter, setSearchFilter] = useState({
       vehicleNo: "",
       gateslipNo: "",
@@ -28,7 +32,7 @@ function App() {
     const [viewData, setViewData] = useState(null);
 
 
-    const STORAGE_KEY = "abis_recent_searches";
+    
 
     const saveSearchToHistory = (filters) => {
       const prev = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -37,12 +41,13 @@ function App() {
       );
       const updated = [filters, ...filtered].slice(0, 5);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      localStorage.setItem(ACTIVE_FILTER_KEY, JSON.stringify(filters));
       window.dispatchEvent(new Event("abis-history-update"));
     };
 
-  const getSearchHistory = () => {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-  };
+    const getSearchHistory = () => {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    };
 
 
     const openModal = (rawData) => {
@@ -52,7 +57,6 @@ function App() {
         setViewData({});
       }
       setShowModal(true);
-      
     }
 
     const closeModal = () => {
@@ -72,6 +76,16 @@ function App() {
       return `${dd}-${mm}-${yyyy}`;
     };
 
+    const isEmptySearch = (filters) => {
+      return (
+        !filters.vehicleNo &&
+        !filters.gateslipNo &&
+        !filters.searchText &&
+        !filters.fromDate &&
+        !filters.toDate
+      );
+    };
+
 
     const fetchSapData = async (
       filters = searchFilter, isClear = false, page = 1, size = pageSize) => {
@@ -88,18 +102,25 @@ function App() {
       //   return;
       // }
 
-      if (page === 1) {
+      if (page === 1 && !isEmptySearch(filters)) {
         saveSearchToHistory(filters);
       }
 
       setLoading(true);
+
+      let requestData = filters.searchText?.trim();
+      const upperSearch = requestData?.toUpperCase();
+      if (upperSearch === "LOADING" || upperSearch === "UNLOADING" || upperSearch === "TRANSFER") {
+        requestData = `"VEHTYPE":"${upperSearch}"`;
+      }
+
 
       const payload = {
         toDate: formatDate(filters.toDate),
         fromDate: formatDate(filters.fromDate),
         location_id: filters.location,
         vehicle_no: filters.vehicleNo,
-        request_data: filters.searchText,
+        request_data: requestData,
         gate_slip: filters.gateslipNo,
         iColumns: 13,
         sColumns: ",,,,,,,,,,,",
@@ -141,48 +162,79 @@ function App() {
     };
 
     useEffect(() => {
-      fetchSapData();
+      localStorage.removeItem("abis_active_search");
+      fetchSapData(
+      {
+        vehicleNo: "",
+        gateslipNo: "",
+        location: "190aabfeacb7be739dbffb063f1d8264",
+        fromDate: "",
+        toDate: "",
+        searchText: ""
+      },
+      false,
+      1,
+      pageSize
+      );
     }, []);
 
-const filteredTableData = tableData.filter((row) => {
-    const search = searchFilter.searchText?.trim().toLowerCase();
-    if (!search) return true;
 
-    let raw = {};
-    try {
-        raw = row.raw_data ? JSON.parse(row.raw_data) : {};
-    } catch {
-      raw = {};
-    }
+    useEffect(() => {
+      localStorage.removeItem("abis_recent_searches");
+    },[]);
 
-    if (search === "loading" || search === "unloading") {
-      return raw.VEHTYPE?.toLowerCase() === search;
-    }
+    useEffect(() => {
+      fetchSapData(searchFilter, false, 1, pageSize);
+    }, []);
 
-    const rawString = JSON.stringify(raw).toLowerCase();
-    return (
-      row.vehicle_no?.toLowerCase().includes(search) ||
-      rawString.includes(search)
-    );
-});
+// const filteredTableData = tableData.filter((row) => {
+//     const search = searchFilter.searchText?.trim().toLowerCase();
+//     if (!search) return true;
+
+//     let raw = {};
+//     try {
+//         raw = row.raw_data ? JSON.parse(row.raw_data) : {};
+//     } catch {
+//       raw = {};
+//     }
+
+//     if (search === "loading" || search === "unloading" || search === "transfer") {
+//       return raw.VEHTYPE?.toLowerCase() === search;
+//     }
+
+//     const rawString = JSON.stringify(raw).toLowerCase();
+//     return (
+//       row.vehicle_no?.toLowerCase().includes(search) ||
+//       rawString.includes(search)
+//     );
+// });
 
 
 
   return (
     <div className="App">
+
       <Header />
-      <div className="container">
-        <SearchHistory onSelect={handleHistorySelect} />
-        <SearchFilter onSearch={fetchSapData}
+
+      <div className="container-fluid px-4">
+        
+        <SearchHistory 
+          onSelect={handleHistorySelect} 
+        />
+
+        <SearchFilter 
+          onSearch={fetchSapData}
           setSearchFilter={setSearchFilter}
           searchFilter={searchFilter}
         />
+        
         <DataTable 
-          data={filteredTableData} 
+          data={tableData} 
           loading={loading} 
-          onView={openModal} />
+          onView={openModal} 
+        />
 
-         <Modal 
+        <Modal 
           show={showModal}
           onClose={closeModal}
           data={viewData}

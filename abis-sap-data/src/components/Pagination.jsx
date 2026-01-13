@@ -14,7 +14,6 @@ const Pagination = ({
   const startRecord = (currentPage - 1) * pageSize + 1;
   const endRecord = Math.min(currentPage * pageSize, totalRecords);
 
-  // 👇 Build pages with ellipsis
   const pages = [];
   let lastPage = 0;
 

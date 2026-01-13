@@ -44,12 +44,13 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
         searchText: ""
     };
     setSearchFilter(clearedFilters);
+    localStorage.removeItem("abis_active_search");
     onSearch(clearedFilters, false);
   };
 
   return (
     <>
-    <div className="card shadow-sm mb-4">
+    <div className="card shadow-sm mb-4 search-card-wide">
       <div className="card-body">
         <div className="row g-3 align-items-end">
 
@@ -73,8 +74,8 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
           </div> */}
 
           {/* Vehicle No */}
-          <div className="col-md-3">
-            <label className="form-label fw-semibold">Vehicle No</label>
+          <div className="col-md-2">
+            <label className="form-label px-2 fw-semibold">Vehicle No</label>
             <input
               type="text"
               className="form-control"
@@ -87,8 +88,8 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
           </div>
 
           {/* Gate Slip */}
-          <div className="col-md-3">
-            <label className="form-label fw-semibold">Gate Slip No</label>
+          <div className="col-md-2">
+            <label className="form-label px-2 fw-semibold">Gate Slip No</label>
             <input
               type="text"
               className="form-control"
@@ -102,8 +103,8 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
 
           
 
-        <div className="col-md-3">
-            <label className="form-label fw-semibold">Search</label>
+        <div className="col-md-2">
+            <label className="form-label px-2 fw-semibold">Search</label>
             <input
               type="text"
               className="form-control"
@@ -115,13 +116,9 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
             />
           </div>
 
-          <div className="col-md-3">
-
-          </div>
-
             {/* From Date */}
-          <div className="col-md-3">
-            <label className="form-label fw-semibold">From Date</label>
+          <div className="col-md-2">
+            <label className="form-label px-2 fw-semibold">From Date</label>
             <input
               type="date"
               className="form-control"
@@ -133,8 +130,8 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
           </div>
 
           {/* To Date */}
-          <div className="col-md-3">
-            <label className="form-label fw-semibold">To Date</label>
+          <div className="col-md-2">
+            <label className="form-label px-2 fw-semibold">To Date</label>
             <input
               type="date"
               className="form-control"
@@ -147,10 +144,10 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
             />
           </div>
         
-        <div className="col-12 d-flex justify-content-end gap-2">
+        {/* <div className="col-12 d-flex justify-content-center gap-2"> */}
 
           {/* Buttons */}
-          <div className="col-md-3 d-flex gap-2">
+          <div className="col-md-2 d-flex gap-2">
             <button
               className="btn btn-primary w-100"
               onClick={() => { 
@@ -173,7 +170,7 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
 
         </div>
       </div>
-    </div>
+    {/* </div> */}
 
       {/* 🔔 Location Required Modal */}
 {showLocationModal && (
@@ -182,7 +179,7 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
     <div className="modal-backdrop fade show"></div>
 
     {/* Modal */}
-    <div className="custom-alert-modal">
+    {/* <div className="custom-alert-modal">
       <div className="custom-alert-content">
         <div className="custom-alert-header">
           <span className="fw-semibold">Alert</span>
@@ -207,7 +204,7 @@ const SearchFilter = ({ onSearch, searchFilter, setSearchFilter }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div> */}
   </>
 )}
 
