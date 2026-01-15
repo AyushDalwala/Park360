@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="loadData()">Get Data</button>
+    <h3 id="output"></h3>
+
+    <script>
+        function loadData() {
+            const xhr = new XMLHttpRequest();
+
+            xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1", true);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const data = JSON.parse(xhr.responseText);
+                    document.getElementById("output").innerText = data.title;
+                }
+            };
+        
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
