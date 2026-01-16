@@ -103,5 +103,5 @@ function displayUsers() {
         const li = document.createElement("li");
         li.textContent = `${u.name} (${u.email}) - ${u.city}, ${u.state}, ${u.country}`;
         userList.appendChild(li);
-    })
+    });
 }

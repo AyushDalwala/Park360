@@ -31,6 +31,30 @@ Person.prototype.sayHello = function () {
 let p1 = new Person("Ayush");
 p1.sayHello();
 
+//without prototype and with prototype
+const person = {
+    name: "Ayush",
+    greet: function() {
+        console.log("Hello.......");
+    }
+};
+
+person.greet();
+
+function PR1(name) {
+    this.name = name;
+}
+
+PR1.prototype.greet = function() {
+    console.log("Hello my name is " + this.name);
+};
+
+const pr1 = new PR1("Ayush");
+const pr2 = new PR1("Vansh");
+
+pr1.greet();
+pr2.greet();
+
 //OOP
 
 class Student {
@@ -72,3 +96,37 @@ class Student1 extends Person1 {
 let stu = new Student1("Ayush", "JS");
 stu.hello();
 stu.study();
+
+//super
+class Parent {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+class Child extends Parent {
+    constructor(name, age) {
+        super(name);
+        this.age = age;
+    }
+
+    show(){
+        console.log(this.name, this.age);
+    }
+}
+
+const c = new Child("Ayush", 21);
+c.show();
+
+
+//encapsulation
+class Bank{
+    #balance = 1000;
+
+    getBalance() {
+        console.log(this.#balance);
+    }
+}
+
+const b = new Bank();
+b.getBalance();

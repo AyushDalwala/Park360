@@ -70,6 +70,4 @@ userForm.addEventListener("submit", (e) => {
     const country = countrySelect.value;
     const state = countrySelect.value;
     const city = countrySelect.value;
-
-    if (!name || !email )
 });

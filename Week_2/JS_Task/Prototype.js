@@ -103,3 +103,17 @@ class Car1 {
 
 const myCar = new Car1("Ford");
 console.log(Car1.hello());
+
+
+class Calc {
+    sumNumbers(limit) {
+        let total = 0;
+        for (let i=1; i<=limit; i++) {
+            total += i;
+        }
+        return total;
+    }
+}
+
+const myCalc = new Calc();
+console.log(myCalc.sumNumbers(5));
