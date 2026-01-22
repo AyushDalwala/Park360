@@ -27,13 +27,14 @@ let map = new Map();
 
 map.set("name", "Ayush");
 map.set("age", 22);
-map.set("task", "One");
+map.set(1, "One");
 
 console.log(map.get("name"));
 console.log(map.size);
 console.log(map.has("age"));
 
-map.delete("task");
+map.delete(1);
+console.log(map);
 
 for (let [key, value] of map) {
     console.log(key, value);

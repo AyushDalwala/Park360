@@ -8,8 +8,9 @@ for (let i=1; i<=5; i++) {
 
 let i = 1;
 while(i <= 5) {
+    ++i;
     console.log(i);
-    i++;
+    
 }
 
 let n = 1;
@@ -27,3 +28,6 @@ let student = {name: "Ayush", age: 22};
 for(let key in student) {
     console.log(key ,"=", student[key]);
 }
+
+
+student.map()

@@ -52,6 +52,8 @@ let age = 18;
 let result = (age >= 18) ? "Adult" : "Minor";
 console.log(result);
 
+age >= 18 ? (age >= 24 ? "Eligible" : "Not") : (age <= 16 ? "Less" : "Not" );
+
 //Increment / Decrement
 
 console.log();

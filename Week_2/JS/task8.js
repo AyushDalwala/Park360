@@ -28,7 +28,7 @@ let index = arr.findIndex(v => v === 30);
 console.log(index);
 
 
-let nums = [3, 1, 5, 2, 4];
+let nums = [3, 1, 5, 2, 4, 4, 2];
 
 console.log(nums.sort());
 console.log(nums.reverse());

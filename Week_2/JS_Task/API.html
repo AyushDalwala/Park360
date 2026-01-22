@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country State City</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .small-input {
+            width: 95%;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        select:disabled {
+            background: #eaeaea;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #0055b3;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 25px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h2>User Form</h2>
+
+    
+        <label>Name</label>
+        <input type="text" id="name" class="small-input">
+
+        <label>Email</label>
+        <input type="email" id="email" class="small-input">
+
+        <label>Country</label>
+        <select id="country" onchange="loadStates()">
+            <option value="">-- Select Country --</option>
+        </select>
+
+        <label>State</label>
+        <select id="state" onchange="loadCities()" disabled>
+            <option value="">-- Select State --</option>
+        </select>
+
+        <label>City</label>
+        <select id="city" disabled>
+            <option value="">-- Select City --</option>
+        </select>
+
+        <button onclick="handleSubmit()">Submit</button>
+
+        <div class="error" id="error"></div>
+       
+
+       
+    </div>
+
+     <table id="userTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Country</th>
+                    <th>State</th>
+                    <th>City</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+    <script>
+        const countrySelect = document.getElementById("country");
+        const stateSelect = document.getElementById("state");
+        const citySelect = document.getElementById("city");
+        const errorDiv = document.getElementById("error");
+
+        async function loadCountries() {
+            const res = await fetch(
+                "https://countriesnow.space/api/v0.1/countries/positions"
+            );
+            const data = await res.json();
+
+            localStorage.setItem("countries", JSON.stringify(data.data));
+
+            data.data.forEach(c => {
+                const option = document.createElement("option");
+                option.value = c.name;
+                option.textContent = c.name;
+                countrySelect.appendChild(option);
+            });
+        }
+
+        async function loadStates() {
+            const country = countrySelect.value;
+            stateSelect.innerHTML = `<option value="">-- Select State --</option>`;
+            citySelect.innerHTML = `<option value="">-- Select City --</option>`;
+            stateSelect.disabled = true;
+            citySelect.disabled = true;
+
+            if (!country) return;
+
+            const res = await fetch(
+                "https://countriesnow.space/api/v0.1/countries/states",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({country})
+                }
+            );
+
+            const data = await res.json();
+            localStorage.setItem(`states_${country}`, JSON.stringify(data.data.states));
+
+            data.data.states.forEach(s => {
+                const option = document.createElement("option");
+                option.value = s.name;
+                option.textContent = s.name;
+                stateSelect.appendChild(option);
+            });
+
+            stateSelect.disabled = false;
+        }
+
+        async function loadCities() {
+            const country = countrySelect.value;
+            const state = stateSelect.value;
+            citySelect.innerHTML = `<option value="">-- Select City --</option>`;
+            citySelect.disabled = true;
+
+            if (!state) return;
+
+            const res = await fetch(
+                "https://countriesnow.space/api/v0.1/countries/state/cities",
+                {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({country, state})
+                }
+            );
+
+            const data = await res.json();
+            localStorage.setItem(`cities_${country}_${state}`, JSON.stringify(data.data));
+
+            data.data.forEach(city => {
+                const option = document.createElement("option");
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+
+            citySelect.disabled = false;
+        }
+
+        function validateForm(user) {
+            if (!user.name || !user.email || !user.country || !user.state || !user.city) {
+                errorDiv.textContent = "All fields are required";
+                return false;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(user.email)) {
+                errorDiv.textContent = "Invalid email format";
+                return false;
+            }
+
+            return true;
+        }
+
+        function isDuplicateUser(email) {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            return users.some(u => u.email === email);
+        }
+
+        function saveUser(user) {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            users.push(user);
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+
+         function clearForm() {
+            document.getElementById("name").value = "";
+            document.getElementById("email").value = "";
+            countrySelect.value = "";
+            stateSelect.innerHTML = `<option value="">-- Select State --</option>`;
+            citySelect.innerHTML = `<option value="">-- Select City --</option>`;
+            stateSelect.disabled = true;
+            citySelect.disabled = true;
+        }
+
+        function renderTable() {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const tbody = document.querySelector("#userTable tbody");
+            tbody.innerHTML = "";
+
+            users.forEach(user => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.country}</td>
+                    <td>${user.state}</td>
+                    <td>${user.city}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function handleSubmit() {
+            errorDiv.textContent = "";
+
+            const user = {
+                name: document.getElementById("name").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                country: countrySelect.value,
+                state: stateSelect.value,
+                city: citySelect.value
+            };
+
+            if (!validateForm(user)) return;
+
+            if (isDuplicateUser(user.email)) {
+                errorDiv.textContent = "User already exists!";
+                return;
+            }
+
+            saveUser(user);
+            alert("User saved successfully");
+
+            clearForm();
+            renderTable();
+        }
+       
+        window.onload = function() {
+            loadCountries();
+            renderTable();
+        }
+
+
+    </script>
+
+</body>
+</html>
